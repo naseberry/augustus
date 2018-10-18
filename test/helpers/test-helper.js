@@ -5,6 +5,9 @@ const expect = require('chai').expect;
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const b = require('js-beautify').html;
+const {Builder} = require('selenium-webdriver');
+const {chrome, Options} = require('selenium-webdriver/chrome');
+const test = require('selenium-webdriver/testing');
 
 module.exports = {
   /**
@@ -18,6 +21,27 @@ module.exports = {
 
     afterEach(function() {
       shunterTestHelper.teardown();
+    });
+  },
+
+  seleniumSetup: function(url){
+    let driver;
+    this.driver = driver;
+
+    test.beforeEach(function(done) {
+      this.driver = new Builder()
+        .forBrowser('chrome')
+        .setChromeOptions(
+          new Options().headless()
+        )
+        .build();
+      this.driver.get(url);
+      done();
+    });
+
+    test.afterEach(function(done) {
+      this.driver.quit();
+      done();
     });
   },
 

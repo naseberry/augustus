@@ -23,6 +23,7 @@
   "devDependencies": {
     "callsites": "^2.0.0",
     "chai": "^4.2.0",
+    "chromedriver": "^2.43.3",
     "coveralls": "^3.0.2",
     "eslint": "^5.9.0",
     "js-beautify": "^1.8.8",
@@ -33,6 +34,7 @@
     "nock": "^9.6.1",
     "nyc": "^13.1.0",
     "proxyquire": "^2.1.0",
+    "selenium-webdriver": "^4.0.0-alpha.1",
     "sinon": "^6.3.5",
     "sinon-chai": "^3.3.0",
     "timekeeper": "^2.1.2",
