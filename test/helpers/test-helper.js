@@ -5,9 +5,9 @@ const expect = require('chai').expect;
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const b = require('js-beautify').html;
+
 const {Builder} = require('selenium-webdriver');
-const {chrome, Options} = require('selenium-webdriver/chrome');
-const test = require('selenium-webdriver/testing');
+const chrome = require('selenium-webdriver/chrome');
 
 module.exports = {
   /**
@@ -24,25 +24,29 @@ module.exports = {
     });
   },
 
-  seleniumSetup: function(url){
+  /**
+  * This function sets up the paths before selenium test is run.
+  * It then tears down the set up for test to ensure resources and released
+  *
+  * @param url [string] The url to run our tests against
+  */
+  seleniumSetup: (url) => {
     let driver;
     this.driver = driver;
 
-    test.beforeEach(function(done) {
+    before(async () => {
       this.driver = new Builder()
         .forBrowser('chrome')
         .setChromeOptions(
-          new Options().headless()
+          new chrome.Options().headless()
         )
         .build();
-      this.driver.get(url);
-      done();
+      await this.driver.get(url);
     });
 
-    test.afterEach(function(done) {
-      this.driver.quit();
-      done();
-    });
+    after(() => this.driver.quit());
+
+    return this;
   },
 
   /**

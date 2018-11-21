@@ -1,26 +1,26 @@
 const testHelper = require('../../../helpers/test-helper');
+const {Builder, By, Key, until} = require('selenium-webdriver');
 const {expect} = require('chai');
-const {chrome, Options} = require('selenium-webdriver/chrome');
-const test = require('selenium-webdriver/testing');
 
 
-test.describe('search_result_tracking.js', function () {
+describe('search_result_tracking.js', () => {
 
-  testHelper.seleniumSetup('http://localhost:5400/search?count=10&q=brexit&start_index=11');
+  let seleniumSetup = testHelper.seleniumSetup('http://localhost:5400/search?count=10&q=brexit&start_index=11');
 
-  test.describe('listSearchResults()', function () {
-    test.it('results should be greater than 0', function (done) {
-      this.driver.executeScript('return UK_Parliament.searchTracking().addListeners();')
+
+  describe('listSearchResults()', () => {
+    it('results should be greater than 0', async () => {
+      await seleniumSetup.driver.executeScript('return UK_Parliament.searchTracking().addListeners();')
         .then(function(ret) {
-          expect(ret.length).to.be.gt(0);
+          expect(ret.length).to.be.gt(1);
         });
-      done();
     });
   });
 
-  test.describe('resultHintArray()', function () {
-    test.it('returns resultHints', function (done) {
-      this.driver.executeScript('\
+
+  describe('resultHintArray()', () => {
+    it('returns resultHints', async () => {
+      await seleniumSetup.driver.executeScript('\
         return \
         hintNodes = [ \
           { textContent: "hint one" }, \
@@ -32,13 +32,13 @@ test.describe('search_result_tracking.js', function () {
         .then(function(ret) {
           expect(ret).to.be.an('array').to.have.lengthOf(3);
         });
-      done();
     });
   });
 
-  test.describe('getQueryStrings()', function () {
-    test.it('should return all query strings', function (done) {
-      this.driver.executeScript('return UK_Parliament.searchTracking().getQueryStrings();')
+
+  describe('getQueryStrings()', () => {
+    it('should return all query strings', async () => {
+      await seleniumSetup.driver.executeScript('return UK_Parliament.searchTracking().getQueryStrings();')
         .then(function(ret) {
           expect(ret).to.be.an('object');
           /**
@@ -47,15 +47,14 @@ test.describe('search_result_tracking.js', function () {
            */
           expect(ret).to.deep.equal({ count: '10', q: 'brexit', start_index: '11' });
         });
-      done();
     });
 
-    test.it('should return value of `start_index` query string', function (done) {
-      this.driver.executeScript('return UK_Parliament.searchTracking().getQueryStrings()["start_index"];')
+    it('should return value of `start_index` query string', async () => {
+      await seleniumSetup.driver.executeScript('return UK_Parliament.searchTracking().getQueryStrings()["start_index"];')
         .then(function(ret) {
           expect(ret).to.equal('11');
         });
-      done();
     });
   });
+
 });
